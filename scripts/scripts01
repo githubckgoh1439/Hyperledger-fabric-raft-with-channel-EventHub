@@ -1,0 +1,62 @@
+
+
+//=================================================
+
+     # USED : org1.com  
+     # Endorsing peer : peer0.org1.example.com
+     docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp" -e "CORE_PEER_ADDRESS=peer0.org1.example.com:7051" -it cli_org1 bash
+
+     # Endorsing peer : peer1.org1.example.com
+     docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp" -e "CORE_PEER_ADDRESS=peer1.org1.example.com:7052" -it cli_org1 bash
+
+     # USED :  org2.com  
+     # Endorsing peer : peer0.org2.example.com
+     docker exec -e "CORE_PEER_LOCALMSPID=Org2MSP" -e "CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp" -e "CORE_PEER_ADDRESS=peer0.org2.example.com:9051" -it cli_org1 bash
+
+     # Endorsing peer : peer1.org2.example.com
+     docker exec -e "CORE_PEER_LOCALMSPID=Org2MSP" -e "CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp" -e "CORE_PEER_ADDRESS=peer1.org2.example.com:9054" -it cli_org1 bash
+
+
+     # create channel :
+      export ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+      peer channel create -o orderer.example.com:7050 -c channelall -f /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts/channelall.tx --tls --cafile $ORDERER_CA
+
+     # channel join :
+     export ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+     peer channel join -b channelall.block --tls --cafile $ORDERER_CA
+
+
+     # fabcar :
+      peer chaincode install -n fabcar -p github.com/chaincode/chaincode/fabcar/ -v 1.1 --tls --cafile $ORDERER_CA
+
+      peer chaincode instantiate -o orderer.example.com:7050 --tls --cafile $ORDERER_CA -C channelall -c '{"Args":[]}'  -n fabcar -v 1.1 -P "OR('Org1MSP.peer', 'Org2MSP.peer')"
+
+     - peer chaincode invoke -o orderer.example.com:7050 --tls --cafile $ORDERER_CA -C channelall -n fabcar -c '{"Args":["initLedger"]}'
+     - peer chaincode query -o orderer.example.com:7050 --tls --cafile $ORDERER_CA -C channelall -n fabcar -c '{"Args":["queryAllCars"]}'
+     - peer chaincode invoke -o orderer.example.com:7050 --tls --cafile $ORDERER_CA -C channelall -n fabcar -c '{"Args":["createCar", "CAR81", "Proton", "MXW81", "grey", "mxw81"]}'
+     - peer chaincode query -o orderer.example.com:7050 --tls --cafile $ORDERER_CA -C channelall -n fabcar -c '{"Args":["queryCar", "CAR81"]}'
+ 
+    # fabcar install then upgrade new version: 
+    # [Title : How to - Chaincode lifecycle]
+      peer chaincode install -n fabcar -p github.com/chaincode/chaincode/fabcar_v1_2 -v 1.2 --tls --cafile $ORDERER_CA
+      peer chaincode upgrade -o orderer.example.com:7050 -C channelall -n fabcar -v 1.2 -p github.com/chaincode/chaincode/fabcar_v1_2 -c '{"Args":["removeCar","CAR9991"]}' --tls --cafile $ORDERER_CA -P "OR('Org1MSP.peer', 'Org2MSP.peer')"
+
+
+   # common CLI :  
+   peer channel getinfo -c channelall
+   peer channel getinfo -c channelall -o orderer.example.com:7050
+
+
+   peer chaincode list -C channelall -o orderer.example.com:7050 --installed
+
+
+============================================= END :
+
+
+
+
+
+
+
+//=================================================END 
+
