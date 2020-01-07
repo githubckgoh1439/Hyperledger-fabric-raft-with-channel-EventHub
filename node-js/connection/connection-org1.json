@@ -1,0 +1,142 @@
+{
+    "name": "example",
+    "version": "1.0.0",
+    "client": {
+        "organization": "Org1",
+        "connection": {
+            "timeout": {
+                "peer": {
+                    "endorser": "300"
+                },
+                "orderer": "300"
+            }
+        }
+    },
+    "channels": {
+        "channelall": {
+            "orderers": [
+                "orderer.example.com",
+                "orderer2.example.com",
+                "orderer3.example.com",
+                "orderer4.example.com",
+                "orderer5.example.com"
+            ],
+            "peers": {
+                "peer0.org1.example.com": {
+                 "endorsingPeer": true,
+                 "chaincodeQuery": true,
+                 "ledgerQuery": true,
+                 "eventSource": true
+                }
+            }
+        }
+    },
+    "organizations": {
+        "Org1": {
+            "mspid": "Org1MSP",
+            "peers": [
+                "peer0.org1.example.com",
+                "peer1.org1.example.com"
+            ],
+            "certificateAuthorities": [
+                "ca.org1.example.com"
+            ],
+            "adminPrivateKey": {
+                "path": "/Users/nagaraj/gowork/src/github.com/workspace/fabric_multi/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/265fe789ca7d832a8d248e89c8c683cecf1ab6e506b04f7e4ec92bf40da98705_sk"
+            },
+            "signedCert": {
+                "path": "/Users/nagaraj/gowork/src/github.com/workspace/fabric_multi/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem"
+            }
+        }
+    },
+    "orderers": {
+        "orderer.example.com": {
+            "url": "grpcs://127.0.0.1:7050",
+
+            "grpcOptions": {
+                "ssl-target-name-override": "orderer.example.com",
+                "grpc.keepalive_timeout_ms":80000
+            },
+            "tlsCACerts": {
+                "path":"/Users/nagaraj/gowork/src/github.com/workspace/fabric_multi/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
+            }
+        },
+        "orderer2.example.com": {
+            "url": "grpcs://127.0.0.1:8050",
+
+            "grpcOptions": {
+                "ssl-target-name-override": "orderer2.example.com",
+                "grpc.keepalive_timeout_ms":80000
+            },
+            "tlsCACerts": {
+                "path":"/Users/nagaraj/gowork/src/github.com/workspace/fabric_multi/crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
+            }
+        },
+        "orderer3.example.com": {
+            "url": "grpcs://127.0.0.1:9050",
+
+            "grpcOptions": {
+                "ssl-target-name-override": "orderer3.example.com",
+                "grpc.keepalive_timeout_ms":80000
+            },
+            "tlsCACerts": {
+                "path":"/Users/nagaraj/gowork/src/github.com/workspace/fabric_multi/crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
+            }
+        },
+        "orderer4.example.com": {
+            "url": "grpcs://127.0.0.1:10050",
+
+            "grpcOptions": {
+                "ssl-target-name-override": "orderer4.example.com",
+                "grpc.keepalive_timeout_ms":80000
+            },
+            "tlsCACerts": {
+                "path":"/Users/nagaraj/gowork/src/github.com/workspace/fabric_multi/crypto-config/ordererOrganizations/example.com/orderers/orderer4.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
+            }
+        },
+        "orderer5.example.com": {
+            "url": "grpcs://127.0.0.1:11050",
+
+            "grpcOptions": {
+                "ssl-target-name-override": "orderer5.example.com",
+                "grpc.keepalive_timeout_ms":80000
+            },
+            "tlsCACerts": {
+                "path":"/Users/nagaraj/gowork/src/github.com/workspace/fabric_multi/crypto-config/ordererOrganizations/example.com/orderers/orderer5.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
+            }
+        }
+    },
+    "peers": {
+        "peer0.org1.example.com": {
+            "url": "grpcs://127.0.0.1:7051",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.org1.example.com",
+                "grpc.keepalive_timeout_ms": 80000
+            },
+            "tlsCACerts": {
+                "path": "/Users/nagaraj/gowork/src/github.com/workspace/fabric_multi/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/tlscacerts/tlsca.org1.example.com-cert.pem"
+
+            },
+            "clientKey": {
+                "path": "/Users/nagaraj/gowork/src/github.com/workspace/fabric_multi/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/tls/client.key"
+            },
+            "clientCert": {
+                "path": "/Users/nagaraj/gowork/src/github.com/workspace/fabric_multi/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/tls/client.crt"
+            }
+
+        }
+    },
+   "certificateAuthorities": {
+        "ca.org1.example.com": {
+             "url": "http://127.0.0.1:7054",
+             "caName": "ca.org1.example.com",
+             "httpOptions":{
+                "verify": false
+             },
+             "tlsCACerts": {
+                 "path": "/Users/nagaraj/gowork/src/github.com/workspace/fabric_multi/crypto-config/peerOrganizations/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem"
+             }
+        }
+    }
+
+}
