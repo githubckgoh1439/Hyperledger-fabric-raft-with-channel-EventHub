@@ -357,7 +357,7 @@ Profiles:
                 Organizations:
                     - *Org1
                     - *Org2
-    TwoOrgsChannel:
+    Channelall:
         Consortium: SampleConsortium
         <<: *ChannelDefaults
         Application:
